@@ -30,7 +30,7 @@
         <!--START OF SCOREBOARD GRID-->
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="2">
             <!--Create a ListView to see the Frames from our Scoreboard-->
-            <ListView ItemsSource="{Binding Source=Scoreboard.Frames}">
+            <ListView ItemsSource="{Binding Scoreboard.Frames}">
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <!--Set the orientation to Horizontal (left to right)-->
@@ -43,8 +43,8 @@
                             <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="25"/>
-                                        <ColumnDefinition Width="25"/>
+                                        <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="30"/>
@@ -53,10 +53,10 @@
                                     </Grid.RowDefinitions>
                                     <!--Data Bind our Total Score and Frame Numbers-->
                                     <!--The Textboxes are used to get the scores of the frames-->
-                                    <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="{Binding FrameNumber}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                                    <TextBox Grid.Column="0" Grid.Row="1"  x:Name="FirstScore" />
-                                    <TextBox Grid.Column="1" Grid.Row="1"  x:Name="SecondScore" />
-                                    <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Content="{Binding TotalScore}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                                    <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Content="{Binding FrameNumber}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Frame {0}"/>
+                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding FirstScore}" x:Name="FirstScore"  />
+                                    <Label Grid.Column="1" Grid.Row="1"  Content="{Binding SecondScore}" x:Name="SecondScore" />
+                                    <Label Grid.Row="2" Grid.Column="0" x:Name="TotalScore" Grid.ColumnSpan="2" Content="{Binding TotalScore}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Total: {0}"/>
                                 </Grid>
                                 <Border BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Stretch"></Border>
                             </StackPanel>
