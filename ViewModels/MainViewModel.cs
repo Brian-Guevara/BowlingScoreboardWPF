@@ -20,7 +20,19 @@ namespace BowlingApp.ViewModels
         // Scores of the frames we are working with
         private int _firstscore;
         private int _secondscore;
+        private int _thirdscore;
         private int _totalscore;
+        private int _frameNumber;
+        private FrameStatus _frameStatus;
+
+        public FrameStatus FrameStatus
+        {
+            get { return _frameStatus; }
+            set { 
+                _frameStatus = value;
+                RaisePropertyChanged(() => FrameStatus);
+            }
+        }
 
 
         public FrameModel CurrentFrame
@@ -33,7 +45,7 @@ namespace BowlingApp.ViewModels
             }
         }
 
-        private int _frameNumber;
+
 
         public ScoreboardModel Scoreboard
         {
@@ -82,13 +94,24 @@ namespace BowlingApp.ViewModels
             }
         }
 
+        public int ThirdScore
+        {
+            get { return _thirdscore; }
+            set
+            {
+                _thirdscore = value;
+                RaisePropertyChanged(() => ThirdScore);
+                RaisePropertyChanged(() => TotalScore);
+
+            }
+        }
         public int TotalScore
         {
             get
             {return _totalscore;}
             set
             {
-                _totalscore = value;
+                _totalscore = _firstscore + _secondscore;
                 RaisePropertyChanged(() => TotalScore);
             }
         }

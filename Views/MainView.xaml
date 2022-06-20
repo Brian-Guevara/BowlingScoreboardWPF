@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:BowlingApp.Views"
         mc:Ignorable="d"
         Title="Scoreboard Application" Height="300" Width="1200">
-    <Grid>
+        <Grid>
         <!--We start by organizing our application by using a Grid
         and setting the definitions for it-->
         <Grid.ColumnDefinitions>
@@ -31,6 +31,26 @@
         <Grid Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="4" Margin="2">
             <!--Create a ListView to see the Frames from our Scoreboard-->
             <ListView ItemsSource="{Binding Scoreboard.Frames}">
+                <ListView.Resources>
+                    <Style TargetType="TextBox" x:Key="TextBoxFrame">
+                        <Setter Property="IsEnabled" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="FrameStatus.First">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                    
+                    <Style TargetType="TextBox" x:Key="TextBoxVisible">
+                        <Setter Property="Visibility" Value="Hidden" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding FrameNumber}"  Value="10">
+                                <Setter Property="Visibility" Value="Visible" />
+                                <Setter Property="Width" Value="40" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Resources>
                 <ListView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <!--Set the orientation to Horizontal (left to right)-->
@@ -45,6 +65,8 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="40"/>
                                         <ColumnDefinition Width="40"/>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition Width="5"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="30"/>
@@ -54,17 +76,20 @@
                                     <!--Data Bind our Total Score and Frame Numbers-->
                                     <!--The Textboxes are used to get the scores of the frames-->
                                     <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Content="{Binding FrameNumber}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Frame {0}"/>
-                                    <Label Grid.Column="0" Grid.Row="1" Content="{Binding FirstScore}" x:Name="FirstScore"  />
-                                    <Label Grid.Column="1" Grid.Row="1"  Content="{Binding SecondScore}" x:Name="SecondScore" />
+                                    <TextBox Grid.Column="0" Grid.Row="1" Text="{Binding FirstScore}" x:Name="FirstScore" Style="{StaticResource TextBoxFrame}" />
+                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SecondScore}" x:Name="SecondScore"  Style="{StaticResource TextBoxFrame}" />
+                                    <TextBox Grid.Column="2" Grid.Row="1"  Text="{Binding ThirdScore}" x:Name="ThirdScore" Style="{StaticResource TextBoxVisible}"/>
                                     <Label Grid.Row="2" Grid.Column="0" x:Name="TotalScore" Grid.ColumnSpan="2" Content="{Binding TotalScore}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Total: {0}"/>
                                 </Grid>
                                 <Border BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Stretch"></Border>
                             </StackPanel>
                         </Border>
+
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
+
     </Grid>
-    
+
 </Window>

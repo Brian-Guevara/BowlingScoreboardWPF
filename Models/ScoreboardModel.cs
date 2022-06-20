@@ -16,7 +16,8 @@ namespace BowlingApp.Models
 
         public ObservableCollection<FrameModel> Frames { get { return _frames; }}
 
-        public int FrameCount { get; set; }
+        public int StartFrame { get; set; }
+        public int EndFrame { get; set; }
 
 
         public ScoreboardModel()
@@ -31,7 +32,34 @@ namespace BowlingApp.Models
 
             //Set our first frame to be ready/applicable for score
             _frames[0].Status = FrameStatus.First;
-            FrameCount = 0;
+            StartFrame = 0;
+            EndFrame = 0;
+            AddScore(10);
+            AddScore(10);
+            AddScore(10);
+   
+            
+            AddScore(10);
+            AddScore(10);
+            AddScore(10);
+            AddScore(10);
+            AddScore(10);
+            AddScore(10);
+            AddScore(5);
+            AddScore(1);
+            //AddScore(5);
+
+
+
+            /*AddScore(6);
+            AddScore(4);
+            AddScore(4);
+            AddScore(2);
+            AddScore(5);
+            AddScore(6);
+            */
+
+
             RaisePropertyChanged<ObservableCollection<FrameModel>>(() => Frames);
 
         }
@@ -39,41 +67,85 @@ namespace BowlingApp.Models
         //Function which will add the score to a Frame and update its status.
         public void AddScore(int score)
         {
-            FrameModel currentFrame = this._frames[this.FrameCount];
+           
+            // Starting frame we will iterate from until we hit a Waiting
+            int i = StartFrame;
+            int x = EndFrame;
+            while (i <= x && _frames[i].Status != FrameStatus.Waiting)
+            {
 
-            // Condition if we hit lit than 10 pins in the first score of a frame
-            if (currentFrame.Status == FrameStatus.First && score < 10)
-            {
-                currentFrame.FirstScore = score;
-                currentFrame.Status = FrameStatus.Second;
+                FrameModel currentFrame = _frames[i];
+
+
+                switch(currentFrame.Status)
+                {
+                    case FrameStatus.First:
+                        currentFrame.FirstScore = score;
+                        //Strike
+                        if (score == 10)
+                        {
+                            currentFrame.SecondScore = 0;
+                            currentFrame.Status = FrameStatus.Strike;
+                            this.EndFrame++;
+                        }
+                        //Non-Strike
+                        else
+                        {
+                            currentFrame.Status = FrameStatus.Second;
+                        }
+                        break;
+
+
+                    case FrameStatus.Second:
+                        currentFrame.SecondScore = score;
+
+                        // Spare
+                       if ((currentFrame.FirstScore + score) == 10)
+                                {
+
+                            currentFrame.SecondScore = score;
+                            currentFrame.Status = FrameStatus.Spare;
+                            this.EndFrame++;
+
+                        }
+                       // Non Spare
+                        else if ((currentFrame.FirstScore + score) < 10)
+                        {
+                            currentFrame.Status = FrameStatus.End;
+                            if (i >0)
+                                currentFrame.TotalScore += _frames[i - 1].TotalScore;
+                            this.StartFrame++;
+
+                        }
+
+
+                        break;
+
+                    case FrameStatus.Spare:
+                        currentFrame.Status = FrameStatus.End;
+                        if (i > 0)
+                            currentFrame.TotalScore += _frames[i - 1].TotalScore;
+                        this.StartFrame++;
+                        break;
+
+                    case FrameStatus.Strike:
+                        currentFrame.Status = FrameStatus.Spare;
+                        break;
+
+
+                }
+                currentFrame.TotalScore += score;
+                i++;
+
             }
 
-            // Condition if we hit a Strike
-            else if (currentFrame.Status == FrameStatus.First && score == 10)
-            {
-                currentFrame.FirstScore = score;
-                currentFrame.Status = FrameStatus.Strike;
-                this._frames[this.FrameCount + 1].Status = FrameStatus.First;
-            }
-
-            // Condition if the two scores for a frame are less than 10 (not a spare)
-            else if (currentFrame.Status == FrameStatus.Second && (currentFrame.FirstScore + score) < 10)
-            {
-                currentFrame.SecondScore = score;
-                currentFrame.TotalScore = currentFrame.FirstScore + currentFrame.SecondScore;
-                currentFrame.Status = FrameStatus.End;
-            }
-            else if (currentFrame.Status == FrameStatus.Second && (currentFrame.FirstScore + score) == 10)
-            {
-                currentFrame.SecondScore = score;
-                currentFrame.TotalScore = currentFrame.FirstScore + currentFrame.SecondScore;
-                currentFrame.Status = FrameStatus.Spare;
-            }
+            if (_frames[EndFrame].Status == FrameStatus.Waiting && EndFrame < 10)
+                _frames[EndFrame].Status = FrameStatus.First;
 
 
         }
 
-       
+
 
 
     }

@@ -69,7 +69,7 @@ namespace BowlingApp.Models
     public class LastFrameModel : FrameModel
     {
         // The last frame of the model will have slots for 3 possible scores.
-        public int ThirdScore;
+        public int ThirdScore { get; set; }
         public LastFrameModel()
         {
             FrameNumber = 10;
