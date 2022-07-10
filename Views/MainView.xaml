@@ -33,20 +33,39 @@
             <ListView ItemsSource="{Binding Scoreboard.Frames}">
                 <ListView.Resources>
                     <Style TargetType="TextBox" x:Key="TextBoxFrame">
-                        <Setter Property="IsEnabled" Value="True" />
+                        <Setter Property="IsEnabled" Value="False" />
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding FrameStatus}"  Value="FrameStatus.First">
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="1">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="2">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="3">
                                 <Setter Property="IsEnabled" Value="True" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
-                    
-                    <Style TargetType="TextBox" x:Key="TextBoxVisible">
+
+                    <Style TargetType="TextBox" x:Key="LastFrame">
                         <Setter Property="Visibility" Value="Hidden" />
+                        <Setter Property="IsEnabled" Value="False" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding FrameNumber}"  Value="10">
                                 <Setter Property="Visibility" Value="Visible" />
                                 <Setter Property="Width" Value="40" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="1">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="2">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="3">
+                                <Setter Property="IsEnabled" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding FrameStatus}"  Value="15">
+                                <Setter Property="IsEnabled" Value="True" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -76,9 +95,20 @@
                                     <!--Data Bind our Total Score and Frame Numbers-->
                                     <!--The Textboxes are used to get the scores of the frames-->
                                     <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2"  Content="{Binding FrameNumber}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Frame {0}"/>
-                                    <TextBox Grid.Column="0" Grid.Row="1" Text="{Binding FirstScore}" x:Name="FirstScore" Style="{StaticResource TextBoxFrame}" />
-                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SecondScore}" x:Name="SecondScore"  Style="{StaticResource TextBoxFrame}" />
-                                    <TextBox Grid.Column="2" Grid.Row="1"  Text="{Binding ThirdScore}" x:Name="ThirdScore" Style="{StaticResource TextBoxVisible}"/>
+                                    <TextBox Grid.Column="0" Grid.Row="1" Text="{Binding FirstScore}" 
+                                             x:Name="FirstScore" Style="{StaticResource TextBoxFrame}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding FirstScore_Add}" Key="Enter" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                    <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding SecondScore}" 
+                                             x:Name="SecondScore"  Style="{StaticResource TextBoxFrame}">
+                                        <TextBox.InputBindings>
+                                            <KeyBinding Command="{Binding SecondScore_Add}" Key="Enter" />
+                                        </TextBox.InputBindings>
+                                    </TextBox>
+                                        <TextBox Grid.Column="2" Grid.Row="1"  Text="{Binding ThirdScore}" 
+                                             x:Name="ThirdScore" Style="{StaticResource LastFrame}"/>
                                     <Label Grid.Row="2" Grid.Column="0" x:Name="TotalScore" Grid.ColumnSpan="2" Content="{Binding TotalScore}" VerticalAlignment="Center" HorizontalAlignment="Center" ContentStringFormat="Total: {0}"/>
                                 </Grid>
                                 <Border BorderThickness="1" BorderBrush="Blue" VerticalAlignment="Stretch"></Border>
@@ -89,7 +119,8 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Grid>
-
+        <TextBox Grid.Row="4" Grid.Column="2"  x:Name="ScoreInput"/>
+        <Button Grid.Row="4" Grid.Column="3" Content="Add Score" Command="{Binding Add_Score}"/>
     </Grid>
 
 </Window>

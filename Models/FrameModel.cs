@@ -15,15 +15,6 @@ namespace BowlingApp.Models
      * Strike = State when 10 pins are hit during the First State. This causes us to skip the Second status.
      * Spare = Occurs when we knock the remaining Pins in the Second status
     */
-    public enum FrameStatus
-    {
-        Waiting,
-        First,
-        Second,
-        Strike,
-        Spare,
-        End,
-    }
 
 
     public class FrameModel : ObservableObject
@@ -42,7 +33,8 @@ namespace BowlingApp.Models
         public int SecondScore { get; set; }
         public int TotalScore { get; set; }
         public bool IsLastFrame { get; set; }
-        public FrameStatus Status { get; set; }
+        // 0 Waiting, 1 First, 2 Second, 3 Third, 9 spare, 10 Strike, 15 Finished 
+        public int FrameStatus { get; set; }
         public FrameModel()
         {
             FrameNumber = 1;
@@ -51,7 +43,7 @@ namespace BowlingApp.Models
             SecondScore = 0;
             TotalScore = FirstScore + SecondScore;
             IsLastFrame = false;
-            Status = FrameStatus.Waiting;
+            FrameStatus =0;
         }
         public FrameModel(int frameNumber)
         {
@@ -61,7 +53,7 @@ namespace BowlingApp.Models
             SecondScore = 0;
             TotalScore = FirstScore + SecondScore;
             IsLastFrame = false;
-            Status = FrameStatus.Waiting;
+            FrameStatus = 0;
         }
 
 
@@ -79,7 +71,7 @@ namespace BowlingApp.Models
             TotalScore = FirstScore + SecondScore + ThirdScore;
             // We set this to true since this is the last frame in our scoreboard
             IsLastFrame = true;
-            Status = FrameStatus.Waiting;
+            FrameStatus = 0;
         }
 
     }

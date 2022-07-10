@@ -6,6 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using BowlingApp.Models;
 using GalaSoft.MvvmLight;
+using System.Windows.Input;
+using System.Windows;
+using GalaSoft.MvvmLight.CommandWpf;
+using System.Collections.ObjectModel;
+
 
 namespace BowlingApp.ViewModels
 {
@@ -23,9 +28,18 @@ namespace BowlingApp.ViewModels
         private int _thirdscore;
         private int _totalscore;
         private int _frameNumber;
-        private FrameStatus _frameStatus;
+        private int _frameStatus;
 
-        public FrameStatus FrameStatus
+        private int _scoreinput;
+
+        public int ScoreInput
+        {
+            get { return _scoreinput; }
+            set { _scoreinput = value; }
+        }
+
+
+        public int FrameStatus
         {
             get { return _frameStatus; }
             set { 
@@ -41,7 +55,7 @@ namespace BowlingApp.ViewModels
             set 
             { 
                 _currentFrame = value;
-                RaisePropertyChanged(() => CurrentFrame);
+                RaisePropertyChanged<FrameModel>(() => CurrentFrame);
             }
         }
 
@@ -114,6 +128,42 @@ namespace BowlingApp.ViewModels
                 _totalscore = _firstscore + _secondscore;
                 RaisePropertyChanged(() => TotalScore);
             }
+        }
+
+        public  void FirstScore_Add(object sender, KeyEventArgs e)
+        {
+               MessageBox.Show("HEY");
+
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                Scoreboard.AddScore(_firstscore);
+                e.Handled = true;
+            }
+        }
+
+        public  void SecondScore_Add(object sender, KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Enter)
+            {
+                Scoreboard.AddScore(_secondscore);
+                e.Handled = true;
+            }
+        }
+
+        public ICommand Add_Score
+        {
+            get
+            {
+                return new RelayCommand(AddScore, () => true);
+            }
+        }
+
+        public void AddScore()
+        {
+            _scoreboard.AddScore(_scoreinput);
+
+            RaisePropertyChanged<ScoreboardModel>(() => Scoreboard);
+            RaisePropertyChanged<FrameModel>(() => CurrentFrame);
         }
     }
 }
