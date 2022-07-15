@@ -19,6 +19,19 @@ namespace BowlingApp.ViewModels
 
         // Main Object we will be showing is our Scoreboard.
         private ScoreboardModel _scoreboard = new ScoreboardModel();
+
+        public ScoreboardModel Scoreboard
+        {
+            get { return _scoreboard; }
+            set
+            {
+                _scoreboard = value;
+                RaisePropertyChanged<ScoreboardModel>(() => Scoreboard);
+
+            }
+
+
+        }
         // This model will be the current frame we are working with
         private FrameModel _currentFrame;
 
@@ -30,15 +43,17 @@ namespace BowlingApp.ViewModels
         private int _frameNumber;
         private int _frameStatus;
 
-        private int _scoreinput;
 
+        private int _scoreinput;
         public int ScoreInput
         {
             get { return _scoreinput; }
-            set { _scoreinput = value; }
+            set { _scoreinput = value;
+                RaisePropertyChanged(() => ScoreInput);
+            }
         }
 
-
+        /*
         public int FrameStatus
         {
             get { return _frameStatus; }
@@ -58,22 +73,12 @@ namespace BowlingApp.ViewModels
                 RaisePropertyChanged<FrameModel>(() => CurrentFrame);
             }
         }
+        */
 
 
+        
 
-        public ScoreboardModel Scoreboard
-        {
-            get { return _scoreboard; }
-            set
-            {
-                _scoreboard = value;
-                RaisePropertyChanged<ScoreboardModel>(() => Scoreboard);
-
-            }
-
-
-        }
-
+        /*
         public int FrameNumber
         {
             get { return _frameNumber; }
@@ -125,10 +130,13 @@ namespace BowlingApp.ViewModels
             {return _totalscore;}
             set
             {
-                _totalscore = _firstscore + _secondscore;
+                _totalscore = value;
                 RaisePropertyChanged(() => TotalScore);
             }
         }
+
+
+   
 
         public  void FirstScore_Add(object sender, KeyEventArgs e)
         {
@@ -149,7 +157,7 @@ namespace BowlingApp.ViewModels
                 e.Handled = true;
             }
         }
-
+         */
         public ICommand Add_Score
         {
             get
@@ -160,10 +168,15 @@ namespace BowlingApp.ViewModels
 
         public void AddScore()
         {
-            _scoreboard.AddScore(_scoreinput);
+            if (0 > _scoreinput || 10 < _scoreinput)
+            {
+                MessageBox.Show("Incorrect value");
+                return;
+            }
+            Scoreboard.AddScore(_scoreinput);
+            RaisePropertyChanged(() => Scoreboard.Frames);
+            RaisePropertyChanged(() => Scoreboard);
 
-            RaisePropertyChanged<ScoreboardModel>(() => Scoreboard);
-            RaisePropertyChanged<FrameModel>(() => CurrentFrame);
         }
     }
 }

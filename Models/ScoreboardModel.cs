@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 
@@ -14,7 +15,7 @@ namespace BowlingApp.Models
     {
         private ObservableCollection<FrameModel> _frames = new ObservableCollection<FrameModel>();
 
-        public ObservableCollection<FrameModel> Frames { get { return _frames; }}
+        public ObservableCollection<FrameModel> Frames { get { return _frames; } }
 
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
@@ -36,14 +37,27 @@ namespace BowlingApp.Models
             EndFrame = 0;
 
            
-            AddScore(4);
-            AddScore(4);
+
+
             /*
-           AddScore(4);
-           AddScore(6);
-           AddScore(3);
-           AddScore(2);
-           */
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            AddScore(4);
+            */
 
 
             RaisePropertyChanged<ObservableCollection<FrameModel>>(() => Frames);
@@ -54,7 +68,15 @@ namespace BowlingApp.Models
         //Function which will add the score to a Frame and update its status.
         public void AddScore(int score)
         {
-           
+            if (EndFrame== 9 && _frames[EndFrame].FrameStatus == 15)
+            {
+                MessageBox.Show("The Game is over!\nTotal Score: " + _frames[EndFrame].TotalScore);
+                return;
+            }
+
+
+
+
             // Starting frame we will iterate from until we hit a Waiting
             int i = StartFrame;
             int x = EndFrame;
@@ -109,9 +131,10 @@ namespace BowlingApp.Models
                             break;
 
                     }
+                    LastFrame.refreshFrames();
                 }
-                
-                
+
+                // Frames 1 - 9
                 else
                 {
                     switch (currentFrame.FrameStatus)
@@ -148,7 +171,7 @@ namespace BowlingApp.Models
                             else if ((currentFrame.FirstScore + score) < 10)
                             {
                                 currentFrame.FrameStatus = 15;
-                                if (i > 1)
+                                if (i >= 1)
                                     currentFrame.TotalScore += _frames[i - 1].TotalScore;
                                 this.StartFrame++;
                                 this.EndFrame++;
@@ -171,21 +194,17 @@ namespace BowlingApp.Models
 
 
                     }
+                    currentFrame.refreshFrames();
+
                 }
                 currentFrame.TotalScore += score;
+                currentFrame.refreshFrames();
+
                 i++;
 
             }
-            if (EndFrame == 10)
-            {
-                return;
-            }
-
-            else if (_frames[EndFrame].FrameStatus == 0 && EndFrame < 10)
+            if (_frames[EndFrame].FrameStatus == 0 && EndFrame < 10)
                 _frames[EndFrame].FrameStatus = 1;
-
-            RaisePropertyChanged<ObservableCollection<FrameModel>>(() => Frames);
-
 
         }
 

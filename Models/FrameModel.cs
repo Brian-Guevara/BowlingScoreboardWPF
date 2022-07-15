@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace BowlingApp.Models
 {
@@ -56,6 +57,43 @@ namespace BowlingApp.Models
             FrameStatus = 0;
         }
 
+        public void setFirst(int x)
+        {
+            FirstScore = x;
+            RaisePropertyChanged(() => FirstScore);
+            RaisePropertyChanged(() => TotalScore);
+            RaisePropertyChanged(() => FrameStatus);
+
+        }
+
+
+        public void setSecond(int x)
+        {
+            if ((FirstScore + x) > 10)
+            {
+                MessageBox.Show("First and Second Score are higher than 10");
+                return;
+            }
+            SecondScore = x;
+            RaisePropertyChanged(() => SecondScore);
+            RaisePropertyChanged(() => TotalScore);
+            RaisePropertyChanged(() => FrameStatus);
+
+
+        }
+
+        public void refreshFrames()
+        {
+            RaisePropertyChanged(() => FirstScore);
+            RaisePropertyChanged(() => SecondScore);
+            RaisePropertyChanged(() => TotalScore);
+            RaisePropertyChanged(() => FrameStatus);
+
+        }
+
+
+
+
 
     }
     public class LastFrameModel : FrameModel
@@ -72,6 +110,26 @@ namespace BowlingApp.Models
             // We set this to true since this is the last frame in our scoreboard
             IsLastFrame = true;
             FrameStatus = 0;
+        }
+
+        public void setThird(int x)
+        {
+            ThirdScore= x;
+            RaisePropertyChanged(() => ThirdScore);
+            RaisePropertyChanged(() => TotalScore);
+            RaisePropertyChanged(() => FrameStatus);
+
+
+        }
+
+        public void refreshFrames()
+        {
+            RaisePropertyChanged(() => FirstScore);
+            RaisePropertyChanged(() => SecondScore);
+            RaisePropertyChanged(() => ThirdScore);
+            RaisePropertyChanged(() => TotalScore);
+            RaisePropertyChanged(() => FrameStatus);
+
         }
 
     }
