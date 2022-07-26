@@ -21,6 +21,7 @@ namespace BowlingApp.Views
     {
         public MainView()
         {
+
             InitializeComponent();
         }
     }

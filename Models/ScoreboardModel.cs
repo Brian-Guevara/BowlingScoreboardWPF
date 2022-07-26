@@ -15,7 +15,7 @@ namespace BowlingApp.Models
     {
         private ObservableCollection<FrameModel> _frames = new ObservableCollection<FrameModel>();
 
-        public ObservableCollection<FrameModel> Frames { get { return _frames; } }
+        public ObservableCollection<FrameModel> Frames { get { return _frames; }}
 
         public int StartFrame { get; set; }
         public int EndFrame { get; set; }
@@ -36,32 +36,6 @@ namespace BowlingApp.Models
             StartFrame = 0;
             EndFrame = 0;
 
-           
-
-
-            /*
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            AddScore(4);
-            */
-
-
-            RaisePropertyChanged<ObservableCollection<FrameModel>>(() => Frames);
-
         }
 
         
@@ -70,11 +44,9 @@ namespace BowlingApp.Models
         {
             if (EndFrame== 9 && _frames[EndFrame].FrameStatus == 15)
             {
-                MessageBox.Show("The Game is over!\nTotal Score: " + _frames[EndFrame].TotalScore);
+                MessageBox.Show("The Game is already over!\nTotal Score: " + _frames[EndFrame].TotalScore);
                 return;
             }
-
-
 
 
             // Starting frame we will iterate from until we hit a Waiting
@@ -85,7 +57,7 @@ namespace BowlingApp.Models
 
                 FrameModel currentFrame = _frames[i];
 
-
+                #region Last Frame
                 // 10th Frame Conditions
                 if (currentFrame.FrameNumber == 10)
                 {
@@ -127,14 +99,13 @@ namespace BowlingApp.Models
                             LastFrame.ThirdScore = score;
                             LastFrame.FrameStatus = 15;
                             LastFrame.TotalScore += _frames[i - 1].TotalScore;
-                            Console.Write(LastFrame.TotalScore);
                             break;
-
+                          
                     }
-                    LastFrame.refreshFrames();
                 }
-
+                #endregion
                 // Frames 1 - 9
+                #region First Frames
                 else
                 {
                     switch (currentFrame.FrameStatus)
@@ -176,12 +147,22 @@ namespace BowlingApp.Models
                                 this.StartFrame++;
                                 this.EndFrame++;
 
+
                             }
-
-
+                            // Invalid Second Score
+                            else
+                            {
+                                MessageBox.Show("First and Second Score are higher than 10.\nEnter a new value");
+                                return;
+                            }
                             break;
 
                         case 9:
+                            if (_frames[EndFrame].TotalScore + score > 10 && EndFrame < 9 )
+                            {
+                                MessageBox.Show("First and Second Score are higher than 10.\nEnter a new value");
+                                return;
+                            }
                             currentFrame.FrameStatus = 15;
                             if (i > 0)
                                 currentFrame.TotalScore += _frames[i - 1].TotalScore;
@@ -189,22 +170,32 @@ namespace BowlingApp.Models
                             break;
 
                         case 10:
+                            if (_frames[EndFrame].TotalScore + score > 10 && EndFrame < 9)
+                            {
+                                MessageBox.Show("First and Second Score are higher than 10.\nEnter a new value");
+                                return;
+                            }
                             currentFrame.FrameStatus = 9;
                             break;
 
 
                     }
-                    currentFrame.refreshFrames();
 
                 }
+                #endregion
                 currentFrame.TotalScore += score;
-                currentFrame.refreshFrames();
 
                 i++;
 
             }
             if (_frames[EndFrame].FrameStatus == 0 && EndFrame < 10)
+            {
                 _frames[EndFrame].FrameStatus = 1;
+
+            }
+
+            if (_frames[9].FrameStatus == 15)
+                MessageBox.Show("The Game is over!\nTotal Score: " + _frames[9].TotalScore);
 
         }
 

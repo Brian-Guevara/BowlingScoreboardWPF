@@ -24,18 +24,65 @@ namespace BowlingApp.Models
         /* Properties of a Frame within a Scoreboard.
          * First int value represents the frame number from 1 to 10
          * Next three values represent our 2 scores and the sum of those scores
-         * The boolean isLastFrame tells us if this is the last frame in our scoreboard. 
-         *      This is set to true for the 10th frame.
-         * Status tells us what step the Frame is in. It will help to track our Strike and Spare outcomes.
-           
+         * Status tells us what step the Frame is in. It will help to track our Strike and Spare outcomes as well.
         */
+
+        #region Properties
         public int FrameNumber { get; set; }
-        public int FirstScore { get; set; }
-        public int SecondScore { get; set; }
-        public int TotalScore { get; set; }
-        public bool IsLastFrame { get; set; }
+
+        private int _firstScore; 
+        public int FirstScore
+        {
+            get { return _firstScore; }
+            set
+            {
+                _firstScore = value;
+                RaisePropertyChanged(() => FirstScore);
+            }
+        }
+
+
+        private int _secondScore;
+
+        public int SecondScore
+        {
+            get { return _secondScore; }
+            set { 
+                _secondScore = value;
+                RaisePropertyChanged(() => SecondScore);
+            }
+        }
+
+        private int _totalScore;
+
+        public int TotalScore
+        {
+            get { return _totalScore; }
+            set { 
+                _totalScore = value;
+                RaisePropertyChanged(() => TotalScore);
+            }
+        }
+
+
+
+
+
+        private int _frameStatus;
+
+        public int FrameStatus
+        {
+            get { return _frameStatus; }
+            set { 
+                _frameStatus = value;
+                RaisePropertyChanged(() => FrameStatus);
+            
+            }
+        }
+
+        #endregion
+
         // 0 Waiting, 1 First, 2 Second, 3 Third, 9 spare, 10 Strike, 15 Finished 
-        public int FrameStatus { get; set; }
         public FrameModel()
         {
             FrameNumber = 1;
@@ -43,7 +90,6 @@ namespace BowlingApp.Models
             FirstScore = 0;
             SecondScore = 0;
             TotalScore = FirstScore + SecondScore;
-            IsLastFrame = false;
             FrameStatus =0;
         }
         public FrameModel(int frameNumber)
@@ -53,42 +99,7 @@ namespace BowlingApp.Models
             FirstScore = 0;
             SecondScore = 0;
             TotalScore = FirstScore + SecondScore;
-            IsLastFrame = false;
             FrameStatus = 0;
-        }
-
-        public void setFirst(int x)
-        {
-            FirstScore = x;
-            RaisePropertyChanged(() => FirstScore);
-            RaisePropertyChanged(() => TotalScore);
-            RaisePropertyChanged(() => FrameStatus);
-
-        }
-
-
-        public void setSecond(int x)
-        {
-            if ((FirstScore + x) > 10)
-            {
-                MessageBox.Show("First and Second Score are higher than 10");
-                return;
-            }
-            SecondScore = x;
-            RaisePropertyChanged(() => SecondScore);
-            RaisePropertyChanged(() => TotalScore);
-            RaisePropertyChanged(() => FrameStatus);
-
-
-        }
-
-        public void refreshFrames()
-        {
-            RaisePropertyChanged(() => FirstScore);
-            RaisePropertyChanged(() => SecondScore);
-            RaisePropertyChanged(() => TotalScore);
-            RaisePropertyChanged(() => FrameStatus);
-
         }
 
 
@@ -98,8 +109,21 @@ namespace BowlingApp.Models
     }
     public class LastFrameModel : FrameModel
     {
+
+
+
         // The last frame of the model will have slots for 3 possible scores.
-        public int ThirdScore { get; set; }
+        private int _thirdScore;
+
+        public int ThirdScore
+        {
+            get { return _thirdScore; }
+            set { 
+                _thirdScore = value;
+                RaisePropertyChanged(() => ThirdScore);
+            }
+        }
+
         public LastFrameModel()
         {
             FrameNumber = 10;
@@ -108,28 +132,7 @@ namespace BowlingApp.Models
             ThirdScore = 0;
             TotalScore = FirstScore + SecondScore + ThirdScore;
             // We set this to true since this is the last frame in our scoreboard
-            IsLastFrame = true;
             FrameStatus = 0;
-        }
-
-        public void setThird(int x)
-        {
-            ThirdScore= x;
-            RaisePropertyChanged(() => ThirdScore);
-            RaisePropertyChanged(() => TotalScore);
-            RaisePropertyChanged(() => FrameStatus);
-
-
-        }
-
-        public void refreshFrames()
-        {
-            RaisePropertyChanged(() => FirstScore);
-            RaisePropertyChanged(() => SecondScore);
-            RaisePropertyChanged(() => ThirdScore);
-            RaisePropertyChanged(() => TotalScore);
-            RaisePropertyChanged(() => FrameStatus);
-
         }
 
     }
